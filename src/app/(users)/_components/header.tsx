@@ -28,7 +28,7 @@ const Header = () => {
 
       {/* Navigation Options */}
       <div className="flex items-center gap-x-4 text-lg">
-        <div>Teacher Mode</div>
+        <div className="cursor-pointer">Teacher Mode</div>
         <div className="flex gap-x-3">
           <Button variant="outline">Sign In</Button>
           <Button>Sign Up</Button>

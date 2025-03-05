@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         hostname: "www.underconsideration.com",
         pathname: "/brandnew/archives/**",
       },
+      {
+        protocol: "https",
+        hostname: "imagepng.org",
+        pathname: "/wp-content/uploads/2019/08/**",
+      }
     ],
   },
 };
