@@ -4,7 +4,6 @@ import { useForm } from '@tanstack/react-form';
 import React from 'react'
 import type { FieldApi } from '@tanstack/react-form';
 
-const test = 10;
 
 function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
   return (
