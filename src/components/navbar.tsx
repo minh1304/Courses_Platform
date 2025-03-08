@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import Link from "next/link";
 
 export const Navbar = () => {
 return (
@@ -31,7 +32,9 @@ return (
         <div className="cursor-pointer">Teacher Mode</div>
         <div className="flex gap-x-3">
           <Button variant="outline">Sign In</Button>
-          <Button>Sign Up</Button>
+          <Link href="/signup">
+            <Button >Sign Up</Button>
+          </Link>
         </div>
       </div>
     </div>
