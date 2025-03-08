@@ -5,20 +5,6 @@ import React from 'react'
 import type { FieldApi } from '@tanstack/react-form';
 
 
-function FieldInfo({ field }: { field: FieldApi<any, any, any, any> }) {
-  return (
-    <>
-      {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <em className="text-red-500 text-sm">
-          {field.state.meta.errors.join(', ')}
-        </em>
-      ) : null}
-      {/* {field.state.meta.isValidating ? (
-        <span className="text-blue-500">Validating...</span>
-      ) : null} */}
-    </>
-  )
-}
 const SignUpPage = () => {
   const form = useForm({
     defaultValues: {
@@ -28,7 +14,7 @@ const SignUpPage = () => {
       phone: '',
       userName: '',
       password: '',
-      confirm_password: '',
+      confirmPassword: '',
     },
     onSubmit: async ({ value }) => {
       console.log(value)
@@ -54,19 +40,16 @@ const SignUpPage = () => {
                 <form.Field
                   name="email"
                   validators={{
-                    onChange: ({ value }) =>
-                      !value
+                    onChangeAsyncDebounceMs: 500,
+                    onChangeAsync: async ({ value }) => {
+                      return (
+                        !value
                         ? 'An email is required'
                         : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
                               value,
                             )
                           ? 'Invalid Email Address'
-                          : undefined,
-                    onChangeAsyncDebounceMs: 500,
-                    onChangeAsync: async ({ value }) => {
-                      await new Promise((resolve) => setTimeout(resolve, 1000))
-                      return (
-                        value.includes('error') && 'No "error" allowed in email'
+                          : undefined
                       )
                     },
                   }}
@@ -86,7 +69,9 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      <FieldInfo field={field} />
+                      {
+                        field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>
+                      }
                     </>
                   )}
                 />
@@ -96,20 +81,16 @@ const SignUpPage = () => {
                 <form.Field
                   name="phone"
                   validators={{
-                    onChange: ({ value }) =>
-                      !value
+                    onChangeAsyncDebounceMs: 500,
+                    onChangeAsync: async ({ value }) => {
+                      return (
+                        !value
                         ? 'Phone is required'
                         : !/^\d+$/.test(value)
                           ? 'Phone must contain only numbers'
                           : value.length < 10
                             ? 'Phone must be at least 10 digits'
-                            : undefined,
-                    onChangeAsyncDebounceMs: 500,
-                    onChangeAsync: async ({ value }) => {
-                      await new Promise((resolve) => setTimeout(resolve, 1000))
-                      return (
-                        value.includes('error') &&
-                        'No "error" allowed in first name'
+                            : undefined
                       )
                     },
                   }}
@@ -131,7 +112,7 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <FieldInfo field={field} />
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
                       </>
                     )
                   }}
@@ -142,21 +123,15 @@ const SignUpPage = () => {
                 <div className="flex-1">
                   <form.Field
                     name="firstName"
-                    validators={{
-                      onChange: ({ value }) =>
-                        !value
+                    validators={{                        
+                      onChangeAsyncDebounceMs: 500,
+                      onChangeAsync: async ({ value }) => {
+                        return (
+                          !value
                           ? 'A first name is required'
                           : value.length < 3
                             ? 'First name must be at least 3 characters'
-                            : undefined,
-                      onChangeAsyncDebounceMs: 500,
-                      onChangeAsync: async ({ value }) => {
-                        await new Promise((resolve) =>
-                          setTimeout(resolve, 1000),
-                        )
-                        return (
-                          value.includes('error') &&
-                          'No "error" allowed in first name'
+                            : undefined
                         )
                       },
                     }}
@@ -176,8 +151,8 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <FieldInfo field={field} />
-                      </>
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+                        </>
                     )}
                   />
                 </div>
@@ -200,8 +175,8 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <FieldInfo field={field} />
-                      </>
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+                        </>
                     )}
                   />
                 </div>
@@ -211,18 +186,14 @@ const SignUpPage = () => {
                 <form.Field
                   name="userName"
                   validators={{
-                    onChange: ({ value }) =>
-                      !value
+                    onChangeAsyncDebounceMs: 500,
+                    onChangeAsync: async ({ value }) => {
+                      return (
+                        !value
                         ? 'User Name is required'
                         : value.length < 3
                           ? 'User Name must be at least 3 characters'
-                          : undefined,
-                    onChangeAsyncDebounceMs: 500,
-                    onChangeAsync: async ({ value }) => {
-                      await new Promise((resolve) => setTimeout(resolve, 1000))
-                      return (
-                        value.includes('error') &&
-                        'No "error" allowed in first name'
+                          : undefined
                       )
                     },
                   }}
@@ -242,8 +213,8 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      <FieldInfo field={field} />
-                    </>
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+                        </>
                   )}
                 />
               </div>
@@ -257,15 +228,7 @@ const SignUpPage = () => {
                         ? 'Password is required'
                         : value.length < 6
                           ? 'Password must be at least 6 characters'
-                          : undefined,
-                    onChangeAsyncDebounceMs: 500,
-                    onChangeAsync: async ({ value }) => {
-                      await new Promise((resolve) => setTimeout(resolve, 1000))
-                      return (
-                        value.includes('error') &&
-                        'No "error" allowed in first name'
-                      )
-                    },
+                          : undefined,                  
                   }}
                   children={(field) => (
                     <>
@@ -284,15 +247,15 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      <FieldInfo field={field} />
-                    </>
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+                        </>
                   )}
                 />
               </div>
 
               <div>
                 <form.Field
-                  name="confirm_password"
+                  name="confirmPassword"
                   validators={{
                     onChangeListenTo: ['password'],
                     onChange: ({ value, fieldApi }) => {
@@ -315,10 +278,9 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
+                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+
                       </label>
-                      {field.state.meta.errors.map((err) => (
-                        <div className="text-red-500 text-sm italic">{err}</div>
-                      ))}
                     </div>
                   )}
                 </form.Field>
