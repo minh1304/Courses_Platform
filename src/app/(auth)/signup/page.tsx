@@ -2,37 +2,38 @@
 
 import { useForm } from '@tanstack/react-form';
 import React from 'react'
-import type { FieldApi } from '@tanstack/react-form';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 
 const SignUpPage = () => {
   const form = useForm({
     defaultValues: {
-      email: '',
-      firstName: '',
-      lastName: '',
-      phone: '',
-      userName: '',
-      password: '',
-      confirmPassword: '',
+      email: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      userName: "",
+      password: "",
+      confirmPassword: "",
     },
     onSubmit: async ({ value }) => {
-      console.log(value)
+      alert(`${value.email} created success`);
     },
-  })
+  });
   return (
-    <section className="bg-gray-100 dark:bg-gray-900">
+    <section className="bg-gray-100">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold text-gray-900 md:text-2xl dark:text-white text-center">
+            <h1 className="text-xl font-bold text-gray-900 md:text-2xl text-center">
               Create an account
             </h1>
             <form
               onSubmit={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                form.handleSubmit()
+                e.preventDefault();
+                e.stopPropagation();
+                form.handleSubmit();
               }}
               className="space-y-4"
             >
@@ -42,15 +43,13 @@ const SignUpPage = () => {
                   validators={{
                     onChangeAsyncDebounceMs: 500,
                     onChangeAsync: async ({ value }) => {
-                      return (
-                        !value
-                        ? 'An email is required'
+                      return !value
+                        ? "An email is required"
                         : !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(
-                              value,
-                            )
-                          ? 'Invalid Email Address'
-                          : undefined
-                      )
+                            value
+                          )
+                        ? "Invalid Email Address"
+                        : undefined;
                     },
                   }}
                   children={(field) => (
@@ -69,9 +68,11 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                      {
-                        field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>
-                      }
+                      {field.state.meta.errors && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {field.state.meta.errors}
+                        </p>
+                      )}
                     </>
                   )}
                 />
@@ -83,15 +84,13 @@ const SignUpPage = () => {
                   validators={{
                     onChangeAsyncDebounceMs: 500,
                     onChangeAsync: async ({ value }) => {
-                      return (
-                        !value
-                        ? 'Phone is required'
+                      return !value
+                        ? "Phone is required"
                         : !/^\d+$/.test(value)
-                          ? 'Phone must contain only numbers'
-                          : value.length < 10
-                            ? 'Phone must be at least 10 digits'
-                            : undefined
-                      )
+                        ? "Phone must contain only numbers"
+                        : value.length < 10
+                        ? "Phone must be at least 10 digits"
+                        : undefined;
                     },
                   }}
                   children={(field) => {
@@ -112,9 +111,13 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
+                        {field.state.meta.errors && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {field.state.meta.errors}
+                          </p>
+                        )}
                       </>
-                    )
+                    );
                   }}
                 />
               </div>
@@ -123,16 +126,14 @@ const SignUpPage = () => {
                 <div className="flex-1">
                   <form.Field
                     name="firstName"
-                    validators={{                        
+                    validators={{
                       onChangeAsyncDebounceMs: 500,
                       onChangeAsync: async ({ value }) => {
-                        return (
-                          !value
-                          ? 'A first name is required'
+                        return !value
+                          ? "A first name is required"
                           : value.length < 3
-                            ? 'First name must be at least 3 characters'
-                            : undefined
-                        )
+                          ? "First name must be at least 3 characters"
+                          : undefined;
                       },
                     }}
                     children={(field) => (
@@ -151,8 +152,12 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
-                        </>
+                        {field.state.meta.errors && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {field.state.meta.errors}
+                          </p>
+                        )}
+                      </>
                     )}
                   />
                 </div>
@@ -175,8 +180,12 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
-                        </>
+                        {field.state.meta.errors && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {field.state.meta.errors}
+                          </p>
+                        )}
+                      </>
                     )}
                   />
                 </div>
@@ -188,13 +197,11 @@ const SignUpPage = () => {
                   validators={{
                     onChangeAsyncDebounceMs: 500,
                     onChangeAsync: async ({ value }) => {
-                      return (
-                        !value
-                        ? 'User Name is required'
+                      return !value
+                        ? "User Name is required"
                         : value.length < 3
-                          ? 'User Name must be at least 3 characters'
-                          : undefined
-                      )
+                        ? "User Name must be at least 3 characters"
+                        : undefined;
                     },
                   }}
                   children={(field) => (
@@ -213,8 +220,12 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
-                        </>
+                      {field.state.meta.errors && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {field.state.meta.errors}
+                        </p>
+                      )}
+                    </>
                   )}
                 />
               </div>
@@ -225,10 +236,10 @@ const SignUpPage = () => {
                   validators={{
                     onChange: ({ value }) =>
                       !value
-                        ? 'Password is required'
+                        ? "Password is required"
                         : value.length < 6
-                          ? 'Password must be at least 6 characters'
-                          : undefined,                  
+                        ? "Password must be at least 6 characters"
+                        : undefined,
                   }}
                   children={(field) => (
                     <>
@@ -247,8 +258,12 @@ const SignUpPage = () => {
                         onChange={(e) => field.handleChange(e.target.value)}
                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                       />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
-                        </>
+                      {field.state.meta.errors && (
+                        <p className="text-red-500 text-sm mt-1">
+                          {field.state.meta.errors}
+                        </p>
+                      )}
+                    </>
                   )}
                 />
               </div>
@@ -257,12 +272,12 @@ const SignUpPage = () => {
                 <form.Field
                   name="confirmPassword"
                   validators={{
-                    onChangeListenTo: ['password'],
+                    onChangeListenTo: ["password"],
                     onChange: ({ value, fieldApi }) => {
-                      if (value !== fieldApi.form.getFieldValue('password')) {
-                        return 'Passwords do not match'
+                      if (value !== fieldApi.form.getFieldValue("password")) {
+                        return "Passwords do not match";
                       }
-                      return undefined
+                      return undefined;
                     },
                   }}
                 >
@@ -278,8 +293,11 @@ const SignUpPage = () => {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        { field.state.meta.errors && <p className="text-red-500 text-sm mt-1">{field.state.meta.errors}</p>}
-
+                        {field.state.meta.errors && (
+                          <p className="text-red-500 text-sm mt-1">
+                            {field.state.meta.errors}
+                          </p>
+                        )}
                       </label>
                     </div>
                   )}
@@ -289,20 +307,30 @@ const SignUpPage = () => {
               <form.Subscribe
                 selector={(state) => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (
-                  <button
+                  <Button
                     type="submit"
                     disabled={!canSubmit}
-                    className="w-full mt-4 inline-flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400"
+                    className="w-full mt-4"
+                    variant="default"
                   >
-                    {isSubmitting ? '...' : 'Create'}
-                  </button>
+                    {isSubmitting ? "..." : "Create"}
+                  </Button>
                 )}
               />
             </form>
+            <div className="flex items-center">
+              <div className="text-sm m-auto">
+                Already a member?{" "}
+                <Link href="/signin" className="text-blue-600 font-bold">
+                  Sign In
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>  )
+    </section>
+  );
 }
 
 export default SignUpPage;
