@@ -1,6 +1,7 @@
 import { UseCarousel } from "@/hooks/useCarousel";
 import Image from "next/image";
 import React from "react";
+import { Button } from "@/components/ui/button"
 
 export const SectionCreativeLearn = () => {
   const currentImage = UseCarousel({totalImages: 3});
@@ -45,7 +46,7 @@ export const SectionCreativeLearn = () => {
         </div>
       </div>
 
-      <div className="mt-16 max-w-6xl mx-auto grid grid-cols-4 gap-8 items-center">
+      <div className="mt-40 max-w-6xl mx-auto grid grid-cols-4 gap-8 items-center">
         {[
           { value: "25K+", label: "Classes" },
           { value: "600K+", label: "Members" },
@@ -59,9 +60,19 @@ export const SectionCreativeLearn = () => {
         ))}
       </div>
 
-      <div className="flex items-center justify-between mt-12 h-[500px] rounded-lg overflow-hidden">
+      <div className="flex items-center justify-between mt-40 h-[500px] rounded-lg overflow-hidden">
         {/* Left Side Content */}
-        <div className="w-1/2 px-16 mx-auto text-white text-center">AHIHI</div>
+        <div className="w-1/2 px-16 mx-auto text-white">
+          <h2 className="text-4xl font-bold">Courses</h2>
+          <p className="mt-8 ">
+            This is the list of the courses you can enroll in.
+            Course when you need them and when them
+          </p>
+          <div className="text-black mt-8">
+            <Button className="h-12 cursor-pointer" variant="outline">Search for courses</Button>
+          </div>
+
+        </div>
 
         {/* Right Side - Image Carousel */}
         <div className="w-1/2 h-full rounded-r-lg relative">
