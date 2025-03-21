@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Navbar } from "@/components/navbar";
 import type { Metadata } from "next";
 import "./globals.css";
+import Footer from "@/components/Footer";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Initialize QueryClient only once
@@ -26,7 +27,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </QueryClientProvider>
 
             {/* Footer */}
-            <div className="bg-blue-500 h-96">Footer</div>
+            <Footer/>
           </div>
         </main>
       </body>

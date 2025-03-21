@@ -2,6 +2,8 @@ import { UseCarousel } from "@/hooks/useCarousel";
 import Image from "next/image";
 import React from "react";
 import { Button } from "@/components/ui/button"
+import { Skeleton } from "@/components/ui/skeleton"
+
 
 export const SectionCreativeLearn = () => {
   const currentImage = UseCarousel({totalImages: 3});
@@ -90,6 +92,20 @@ export const SectionCreativeLearn = () => {
             />
           ))}
         </div>
+      </div>
+
+      <div className="mt-16 text-center">
+        <h2 className="text-4xl font-bold">Explore Inspiring Online Courses</h2>
+        <div className="mt-8 gap-2 flex flex-wrap justify-center">
+          {["Featured", "Music", "Marketing", "Animation", "Social Media", "Creative Writing"].map(
+            (tag, index) => (<span className="text-sm font-bold border-2 pl-4 pt-1 pr-4 pb-1 m-1 rounded-3xl" key={index}>{tag}</span>)
+          )
+          }
+        </div>
+      </div>
+
+      <div>
+        {/* COURSES DISPLAY */}
       </div>
     </section>
   );
