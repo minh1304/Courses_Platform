@@ -6,9 +6,13 @@ import axios from "axios";
 import Link from "next/link";
 import React from "react";
 
+interface User {
+  email: string;
+  password: string;
+}
 const SignInPage = () => {
   const mutation = useMutation({
-    mutationFn: async (userData: { email: string; password: string }) => {
+    mutationFn: async (userData: User) => {
       return axios.post("http://localhost:3334/auth/signin", userData);
     },
   });
