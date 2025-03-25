@@ -1,25 +1,39 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import Link from "next/link";
 import React from "react";
 
+interface User {
+  email: string;
+  password: string;
+}
 const SignInPage = () => {
+  const mutation = useMutation({
+    mutationFn: async (userData: User) => {
+      return axios.post("http://localhost:3334/auth/signin", userData);
+    },
+  });
+
   const form = useForm({
     defaultValues: {
-      userName: "",
+      email: "",
       password: "",
     },
     onSubmit: async ({ value }) => {
-      alert(`${value.userName} login success`);
+      mutation.mutate(value);
+      alert("Login success")
     },
   });
+
   return (
     <section className="bg-gray-100">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="tex-xl font-bold text-gray-900 md:text-2xl text-center">
+            <h1 className="text-xl font-bold text-gray-900 md:text-2xl text-center">
               Sign In An Account
             </h1>
             <form
@@ -32,11 +46,11 @@ const SignInPage = () => {
             >
               <div>
                 <form.Field
-                  name="userName"
+                  name="email"
                   validators={{
                     onChangeAsyncDebounceMs: 500,
                     onChangeAsync: async ({ value }) => {
-                      return !value ? "User Name is required" : undefined;
+                      return !value ? "Email is required" : undefined;
                     },
                   }}
                   children={(field) => (
@@ -45,9 +59,10 @@ const SignInPage = () => {
                         htmlFor={field.name}
                         className="block text-sm font-medium text-gray-700"
                       >
-                        User Name:
+                        Email:
                       </label>
                       <input
+                        type="email"
                         id={field.name}
                         name={field.name}
                         value={field.state.value}
@@ -107,11 +122,11 @@ const SignInPage = () => {
                 children={([canSubmit, isSubmitting]) => (
                   <Button
                     type="submit"
-                    disabled={!canSubmit}
+                    disabled={!canSubmit || mutation.isPending}
                     className="w-full mt-4"
                     variant="default"
                   >
-                    {isSubmitting ? "..." : "Login"}
+                    {mutation.isPending ? "Logging in..." : "Login"}
                   </Button>
                 )}
               />
