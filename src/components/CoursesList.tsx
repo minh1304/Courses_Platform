@@ -19,7 +19,7 @@ export default function CoursesList() {
   if (error) return <p>Error loading courses</p>;
 
   return (
-    <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 p-4">
+    <div className="grid sm:grid-cols-1 md:grid-cols-4 gap-6 p-4">
       {data?.map((course: any, index: number) => (
         <motion.div
           key={course.courseId}
