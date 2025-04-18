@@ -31,12 +31,12 @@ return (
     <div className="flex items-center gap-x-4 text-lg">
       <div className="cursor-pointer">Teacher Mode</div>
       <div className="flex gap-x-3">
-        <Link href='/signin'>
+        <a href='/signin'>
           <Button variant="outline">Sign In</Button>
-        </Link>
-        <Link href="/signup">
+        </a>
+        <a href="/signup">
           <Button>Sign Up</Button>
-        </Link>
+        </a>
       </div>
     </div>
   </div>

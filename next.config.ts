@@ -13,7 +13,13 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "imagepng.org",
         pathname: "/wp-content/uploads/2019/08/**",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
