@@ -20,6 +20,28 @@ declare global {
     isSelected?: boolean;
     onClick?: () => void;
   }
+  interface SelectedCourseProps {
+    course: Course;
+    handleEnrollNow: (courseId: string) => void;
+  }
+  interface Chapter {
+    chapterId: string;
+    title: string;
+    content: string;
+    video?: string | File;
+    freePreview?: boolean;
+    type: "Text" | "Quiz" | "Video";
+  }
+
+  interface Section {
+    sectionId: string;
+    sectionTitle: string;
+    sectionDescription?: string;
+    chapters: Chapter[];
+  }
+  interface AccordionSectionsProps {
+    sections: Section[];
+  }
 }
   
   export {};

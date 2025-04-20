@@ -4,10 +4,17 @@ import React from "react";
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import CoursesList from "@/components/CoursesList";
+import { useRouter } from "next/navigation";
 
 
 export const SectionCreativeLearn = () => {
   const currentImage = UseCarousel({totalImages: 3});
+  const router = useRouter();
+  const handleCourseClick = () => {
+    router.push('/search', {
+      scroll: false,
+    });
+  }
   return (
     <section className="bg-black text-white py-16 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-3 gap-4 items-center">
@@ -72,7 +79,11 @@ export const SectionCreativeLearn = () => {
             Course when you need them and when them
           </p>
           <div className="text-black mt-8">
-            <Button className="h-12 cursor-pointer" variant="outline">Search for courses</Button>
+            <Button 
+              className="h-12 cursor-pointer"
+              variant="outline"
+              onClick = {() => handleCourseClick()}
+            >Search for courses</Button>
           </div>
 
         </div>

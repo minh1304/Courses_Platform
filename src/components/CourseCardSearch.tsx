@@ -10,7 +10,7 @@ const CourseCardSearch = ({
     <div
       onClick={onClick}
       className={`bg-gray-800 overflow-hidden rounded-lg hover:bg-gray-700 transition duration-200 flex flex-col cursor-pointer border-2 h-full group ${
-        isSelected ? "border-primary-600" : "border-transparent"
+        isSelected ? "border-purple-400" : "border-transparent"
       }`}
     >
       {/* Image Wrapper */}

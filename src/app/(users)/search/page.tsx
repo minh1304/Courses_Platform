@@ -1,6 +1,7 @@
 "use client"
 import CourseCardSearch from '@/components/CourseCardSearch';
 import Loading from '@/components/Loading';
+import SelectedCourse from '@/components/SelectedCourse';
 import { useCourses } from '@/hooks/useCourses';
 import { motion } from 'motion/react';
 import { useSearchParams, useRouter } from 'next/navigation'
@@ -32,6 +33,9 @@ const Search = () => {
       scroll: false,
     });
   };
+  const handleEnrollNow = () => {
+
+  }
   if (isLoading) return <Loading />;
   if (isError || !courses) return <div>Failed</div>; 
 
@@ -56,7 +60,7 @@ const Search = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="basis-3/5 grid grid-cols-1 xl:grid-cols-2 gap-6 auto-rows-fr"
           >
-            {courses.map((course: any) => (
+            {courses.map((course: Course) => (
               <CourseCardSearch
                 key={course.courseId}
                 course={course}
@@ -65,6 +69,20 @@ const Search = () => {
               />
             ))}
           </motion.div>
+
+          {selectedCourse && (
+            <motion.div
+              initial={{ y: 40, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="basis-2/5 min-w-[350px] h-fit border-2 border-purple-400 bg-gray-800 overflow-hidden rounded-lg"
+            >
+              <SelectedCourse
+                course={selectedCourse}
+                handleEnrollNow={handleEnrollNow}
+              />
+            </motion.div>
+          )}
         </div>
       </section>
     </motion.div>
