@@ -36,7 +36,7 @@ export default function CoursesList() {
           viewport={{ amount: 0.4 }}
         >
           <Card
-            className="hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col h-full"
+            className="hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col h-full cursor-pointer"
             onClick={() => handleCourseClick(course.courseId)}
           >
             <CardHeader className="">

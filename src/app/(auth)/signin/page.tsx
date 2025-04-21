@@ -4,17 +4,25 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
+
 import React from "react";
 
-interface User {
-  email: string;
-  password: string;
-}
 const SignInPage = () => {
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: async (userData: User) => {
-      return axios.post("http://localhost:3334/auth/signin", userData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`, userData);
+      return response.data;
     },
+    onSuccess: (data) => {
+      localStorage.setItem("access_token", data.access_token);
+      getRedirectUrl(data.access_token);     
+    },
+    onError: (error: any) => {
+      console.log("Login failed: " + error?.response?.data?.message || "Unknown error");
+    }
   });
 
   const form = useForm({
@@ -24,9 +32,23 @@ const SignInPage = () => {
     },
     onSubmit: async ({ value }) => {
       mutation.mutate(value);
-      alert("Login success")
     },
   });
+
+  const getRedirectUrl = (accessToken: string) => {
+    try {
+      const decoded: DecodedToken = jwtDecode(accessToken);
+      const userType = decoded.usertype;
+      if (userType === "teacher") {
+        router.push("/teacher/courses");
+      } else {
+        router.push("/user/courses");
+      }
+    } catch (error) {
+      console.error("Invalid token:", error);
+      router.push("/user/courses"); // fallback redirect
+    }
+  }
 
   return (
     <section className="bg-gray-100">
@@ -130,6 +152,12 @@ const SignInPage = () => {
                   </Button>
                 )}
               />
+              {mutation.isError && (
+                <p className="text-red-500 text-sm mt-2 text-center">
+                  {mutation.error?.response?.data?.message ||
+                    "Login failed. Please try again."}
+                </p>
+              )}
             </form>
             <div className="flex items-center">
               <div className="text-sm m-auto">

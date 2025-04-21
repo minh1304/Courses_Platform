@@ -1,4 +1,12 @@
 declare global {
+  interface User {
+    email: string;
+    password: string;
+  }
+  interface DecodedToken {
+    usertype: string;
+    [key: string]: any;
+  }
   interface Course {
     courseId: string;
     teacherId: string;

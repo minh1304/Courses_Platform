@@ -2,9 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const fetchCourses = async () => {
-  const { data } = await axios.get("http://localhost:3333/courses");
+  const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/courses`);
   return data;
-};
+}
 
 export const useCourses = () => {
   return useQuery({
