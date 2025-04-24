@@ -39,7 +39,8 @@ const SignInPage = () => {
     try {
       const decoded: DecodedToken = jwtDecode(accessToken);
       const userType = decoded.usertype;
-      if (userType === "teacher") {
+
+      if (userType == "teacher") {
         router.push("/teacher/courses");
       } else {
         router.push("/user/courses");

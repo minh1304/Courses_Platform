@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import React from 'react';
 import Image from "next/image";
 import { motion } from "motion/react";
-import { SectionCreativeLearn } from '../(users)/_components/sectionCreativeLearn';
+import { SectionCreativeLearn } from './_components/sectionCreativeLearn';
 
 const HomePage = () => {
   return (

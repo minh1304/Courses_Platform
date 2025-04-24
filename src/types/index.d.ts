@@ -4,8 +4,9 @@ declare global {
     password: string;
   }
   interface DecodedToken {
+    username: string;
     usertype: string;
-    [key: string]: any;
+    exp: number;
   }
   interface Course {
     courseId: string;
@@ -49,6 +50,9 @@ declare global {
   }
   interface AccordionSectionsProps {
     sections: Section[];
+  }
+  interface AppSidebarProps {
+    usertype: string;
   }
 }
   

@@ -14,9 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <main>
-          <main className="">{children}</main>
-        </main>
+        <main>{children}</main>
       </body>
     </html>
   );
