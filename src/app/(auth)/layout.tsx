@@ -21,12 +21,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* React Query Provider */}
-            <QueryClientProvider client={queryClient}>
-              <main className="mt-20">{children}</main>
-            </QueryClientProvider>
 
+              <QueryClientProvider client={queryClient}>
+                  <main className="mt-20">{children}</main>
+              </QueryClientProvider>
             {/* Footer */}
-            <Footer/>
+            <Footer />
           </div>
         </main>
       </body>

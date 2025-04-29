@@ -16,23 +16,23 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { useAuth } from "@/hooks/useAuth";
+import { useSession } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isLoaded } = useAuth();
-
-  if (!isLoaded) return <Loading />;
-  if (!user)
+  const { data: session, status } = useSession();
+  if (status === "loading") return <Loading />;
+  if (status === "unauthenticated" || !session?.user)
     return <div className="text-center mt-10">Please sign in to access this page.</div>;
 
   return (
     <div className="bg-black">
+      {/* Remove SessionProvider here - already in _app.tsx if you use NextAuth */}
       <SidebarProvider className="dark">
-        <AppSidebar usertype={user.usertype} />
+        <AppSidebar {...session.user}/>
 
         <SidebarInset>
           {/* Header */}

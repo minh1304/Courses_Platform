@@ -6,6 +6,7 @@ import { Navbar } from "@/components/navbar";
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/components/Footer";
+import { SessionProvider } from "next-auth/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   // Initialize QueryClient only once
@@ -14,7 +15,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
+      <SessionProvider>
         <main>{children}</main>
+      </SessionProvider>
       </body>
     </html>
   );

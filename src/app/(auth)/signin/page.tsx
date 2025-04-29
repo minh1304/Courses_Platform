@@ -7,24 +7,46 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 
-import React from "react";
+
+import React, { useEffect } from "react";
+import { getSession, signIn, useSession } from "next-auth/react"
 
 const SignInPage = () => {
+  const { data: session, status } = useSession();
+  const mutationFn = async (userData: { email: string; password: string }) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: userData.email,
+      password: userData.password,
+    });
+  
+    
+    if (res?.error) {
+      console.log(res?.error)
+    }
+  
+    return res;
+  };
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: async (userData: User) => {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`, userData);
-      return response.data;
+    mutationFn,
+    onSuccess: async () => {
+      const session = await getSession();
+      if (session) {
+        if (session?.user?.usertype == "teacher") {
+          router.push("/teacher/courses");
+        } else {
+          router.push("/user/courses");
+        }
+      } else {
+        console.error("No accessToken found in session.");
+        router.push("/user/courses"); // fallback
+      }
     },
-    onSuccess: (data) => {
-      localStorage.setItem("access_token", data.access_token);
-      getRedirectUrl(data.access_token);     
+    onError: (err: any) => {
+      console.error(err);
     },
-    onError: (error: any) => {
-      console.log("Login failed: " + error?.response?.data?.message || "Unknown error");
-    }
   });
-
   const form = useForm({
     defaultValues: {
       email: "",
@@ -34,22 +56,6 @@ const SignInPage = () => {
       mutation.mutate(value);
     },
   });
-
-  const getRedirectUrl = (accessToken: string) => {
-    try {
-      const decoded: DecodedToken = jwtDecode(accessToken);
-      const userType = decoded.usertype;
-
-      if (userType == "teacher") {
-        router.push("/teacher/courses");
-      } else {
-        router.push("/user/courses");
-      }
-    } catch (error) {
-      console.error("Invalid token:", error);
-      router.push("/user/courses"); // fallback redirect
-    }
-  }
 
   return (
     <section className="bg-gray-100">
