@@ -17,7 +17,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useSession } from "next-auth/react";
-
+import { DropdownAvatar } from "@/components/DropdownAvatar";
 export default function DashboardLayout({
   children,
 }: {
@@ -27,12 +27,10 @@ export default function DashboardLayout({
   if (status === "loading") return <Loading />;
   if (status === "unauthenticated" || !session?.user)
     return <div className="text-center mt-10">Please sign in to access this page.</div>;
-
   return (
-    <div className="bg-black">
-      {/* Remove SessionProvider here - already in _app.tsx if you use NextAuth */}
+    <div>
       <SidebarProvider className="dark">
-        <AppSidebar {...session.user}/>
+        <AppSidebar {...session.user} />
 
         <SidebarInset>
           {/* Header */}
@@ -42,18 +40,19 @@ export default function DashboardLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Current Page</BreadcrumbPage>
+                  <BreadcrumbLink href={`/${session.user?.usertype}/courses`}>
+                    Dashboard
+                  </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+            <div className="ml-auto">
+              <DropdownAvatar {...session?.user} />
+            </div>
           </header>
 
           {/* Main Content */}
-          <main className="flex-1 px-8 py-4 bg-black">{children}</main>
+          <main className="flex-1 px-8 py-4">{children}</main>
         </SidebarInset>
       </SidebarProvider>
     </div>

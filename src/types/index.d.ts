@@ -57,6 +57,11 @@ declare global {
     image?: string | null
     usertype?: string | null
   }
+  interface DropdownAvatar {
+    name?: string | null
+    email?: string | null
+    image?: string | null
+  }
 }
   
   export {};
