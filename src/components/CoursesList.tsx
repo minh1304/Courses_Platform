@@ -10,10 +10,17 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { motion } from "motion/react";
+import { useRouter } from "next/navigation";
 
 
 export default function CoursesList() {
   const { data, isLoading, error } = useCourses();
+  const router = useRouter();
+  const handleCourseClick = (courseId: string) => {
+    router.push(`/search?id=${courseId}`, {
+      scroll: false,
+    });
+  };
 
   if (isLoading) return <p>Loading courses...</p>;
   if (error) return <p>Error loading courses</p>;
@@ -28,7 +35,10 @@ export default function CoursesList() {
           transition={{ duration: 0.5, delay: index * 0.2 }}
           viewport={{ amount: 0.4 }}
         >
-          <Card className="hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col h-full">
+          <Card
+            className="hover:shadow-lg hover:-translate-y-1 transition-all duration-300 rounded-2xl overflow-hidden flex flex-col h-full cursor-pointer"
+            onClick={() => handleCourseClick(course.courseId)}
+          >
             <CardHeader className="">
               <Image
                 src={course.image || "/placeholder.png"}
@@ -49,7 +59,7 @@ export default function CoursesList() {
 
               <div className="mt-2 text-sm text-muted-foreground">
                 <p className="text-sm">Teacher: {course.teacherName}</p>
-                <span className="">Price: ${course.price / 100}</span>
+                <span className="">Price: ${course.price}</span>
               </div>
             </CardContent>
           </Card>

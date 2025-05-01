@@ -4,19 +4,49 @@ import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 
-interface User {
-  email: string;
-  password: string;
-}
+
+import React, { useEffect } from "react";
+import { getSession, signIn, useSession } from "next-auth/react"
+
 const SignInPage = () => {
+  const { data: session, status } = useSession();
+  const mutationFn = async (userData: { email: string; password: string }) => {
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: userData.email,
+      password: userData.password,
+    });
+  
+    
+    if (res?.error) {
+      console.log(res?.error)
+    }
+  
+    return res;
+  };
+  const router = useRouter();
   const mutation = useMutation({
-    mutationFn: async (userData: User) => {
-      return axios.post("http://localhost:3334/auth/signin", userData);
+    mutationFn,
+    onSuccess: async () => {
+      const session = await getSession();
+      if (session) {
+        if (session?.user?.usertype == "teacher") {
+          router.push("/teacher/courses");
+        } else {
+          router.push("/user/courses");
+        }
+      } else {
+        console.error("No accessToken found in session.");
+        router.push("/user/courses"); // fallback
+      }
+    },
+    onError: (err: any) => {
+      console.error(err);
     },
   });
-
   const form = useForm({
     defaultValues: {
       email: "",
@@ -24,7 +54,6 @@ const SignInPage = () => {
     },
     onSubmit: async ({ value }) => {
       mutation.mutate(value);
-      alert("Login success")
     },
   });
 
@@ -130,6 +159,12 @@ const SignInPage = () => {
                   </Button>
                 )}
               />
+              {mutation.isError && (
+                <p className="text-red-500 text-sm mt-2 text-center">
+                  {mutation.error?.response?.data?.message ||
+                    "Login failed. Please try again."}
+                </p>
+              )}
             </form>
             <div className="flex items-center">
               <div className="text-sm m-auto">
