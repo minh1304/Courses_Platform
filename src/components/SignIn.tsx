@@ -7,20 +7,25 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from "react";
-import { getSession, signIn, useSession } from "next-auth/react"
+import { getSession, signIn, useSession } from "next-auth/react";
 
 const SignIn = () => {
-const { data: session, status } = useSession();
+  const { data: session, status } = useSession();
   const mutationFn = async (userData: { email: string; password: string }) => {
     const res = await signIn("credentials", {
       redirect: false,
       email: userData.email,
       password: userData.password,
     });
-  
+
     if (res?.error) {
       if (res.error == "Inactive Account") {
-        router.push("/active");
+        const userRes = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-user-id`,{
+          email: userData.email
+        })
+
+        const userId = userRes.data.userId;
+        router.push(`/verifyAccount?userId=${userId}`);
       }
       throw new Error(res.error);
     }
@@ -30,10 +35,9 @@ const { data: session, status } = useSession();
   const mutation = useMutation({
     mutationFn,
     onSuccess: async () => {
-      router.refresh(); 
-    
+      router.refresh();
+
       const session = await getSession(); // this might still be null too early
-      console.log(session)
       if (session?.user?.usertype === "teacher") {
         router.push("/teacher/courses");
       } else {
@@ -41,8 +45,8 @@ const { data: session, status } = useSession();
       }
     },
     onError: (err: any) => {
-      if(err.message =="Inactive Account"){
-        router.push("/active");
+      if (err.message == "Inactive Account") {
+        console.log(err)
       }
     },
   });
@@ -178,6 +182,6 @@ const { data: session, status } = useSession();
       </div>
     </section>
   );
-}
+};
 
-export default SignIn
+export default SignIn;
