@@ -10,8 +10,7 @@ import React, { useEffect } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
 
 const SignIn = () => {
-  const { data: session, status } = useSession();
-  const mutationFn = async (userData: { email: string; password: string }) => {
+  const mutationFn = async (userData: User) => {
     const res = await signIn("credentials", {
       redirect: false,
       email: userData.email,
