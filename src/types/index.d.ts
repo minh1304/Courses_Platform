@@ -3,6 +3,11 @@ declare global {
     email: string;
     password: string;
   }
+  interface UserSignUp {
+    email: string;
+    fullName: string;
+    password: string;
+  }
   interface DecodedToken {
     username: string;
     usertype: string;
