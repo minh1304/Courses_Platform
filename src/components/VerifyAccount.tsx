@@ -28,10 +28,7 @@ const VerifyAccount = () => {
     const fetchExpiredTime = async () => {
       try {
         const res = await axios.post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`,
-          {
-            userid: userId,
-          }
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`,{userid: userId}
         );
         const expiredAt = new Date(res.data.expiredAt).getTime();
         const now = new Date().getTime();
@@ -99,6 +96,28 @@ const VerifyAccount = () => {
     return `${min}:${sec}`;
   };
 
+  const handleResend = async () => {
+    if (!userId) return;
+  
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/resend-mail`, {
+        userid: userId,
+      });
+  
+      // After resending, re-fetch the expiration time
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`, {
+        userid: userId,
+      });
+  
+      const expiredAt = new Date(res.data.expiredAt).getTime();
+      const now = new Date().getTime();
+      const secondsLeft = Math.max(0, Math.floor((expiredAt - now) / 1000));
+      setCountdown(secondsLeft);
+    } catch (error) {
+      console.error("Failed to resend email", error);
+    }
+  };
+  
   return (
     <>
       <section className="bg-gray-100">
@@ -110,8 +129,18 @@ const VerifyAccount = () => {
               </h1>
               {countdown !== null && (
                 <p className="text-sm text-center text-gray-600">
-                  Code expires in: <span className="font-medium text-blue-500">{formatTime(countdown)}</span>
+                  Code expires in:{" "}
+                  <span className="font-medium text-blue-500">
+                    {formatTime(countdown)}
+                  </span>
                 </p>
+              )}
+              {countdown === 0 && (
+                <div className="text-center mt-4">
+                  <Button onClick={() => handleResend()} variant="outline">
+                    Resend Code
+                  </Button>
+                </div>
               )}
               <form
                 onSubmit={(e) => {
@@ -183,9 +212,7 @@ const VerifyAccount = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => handleLoginClick()}>
-              Go to sign in
-            </Button>
+            <Button onClick={() => handleLoginClick()}>Go to sign in</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
