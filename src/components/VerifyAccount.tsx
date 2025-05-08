@@ -30,7 +30,7 @@ const VerifyAccount = () => {
         const res = await axios.post(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`,{userid: userId}
         );
-        const expiredAt = new Date(res.data.expiredAt).getTime();
+        const expiredAt = new Date(res.data.data.expiredAt).getTime();
         const now = new Date().getTime();
         const secondsLeft = Math.max(0, Math.floor((expiredAt - now) / 1000));
         setCountdown(secondsLeft);
@@ -109,7 +109,7 @@ const VerifyAccount = () => {
         userid: userId,
       });
   
-      const expiredAt = new Date(res.data.expiredAt).getTime();
+      const expiredAt = new Date(res.data.data.expiredAt).getTime();
       const now = new Date().getTime();
       const secondsLeft = Math.max(0, Math.floor((expiredAt - now) / 1000));
       setCountdown(secondsLeft);
