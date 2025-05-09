@@ -23,7 +23,7 @@ const SignIn = () => {
           email: userData.email
         })
 
-        const userId = userRes.data.userId;
+        const userId = userRes.data?.data.userId;
         router.push(`/verifyAccount?userId=${userId}`);
       }
       throw new Error(res.error);

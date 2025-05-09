@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error(data.message);
         }
 
-        const { user, access_token } = data;
+        const { user, access_token } = data.data;
 
         return {
           ...user, // email, name, usertype

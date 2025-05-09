@@ -2,7 +2,7 @@
 'use client'
 import { useForm } from '@tanstack/react-form';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from './ui/button';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -20,6 +20,39 @@ const VerifyAccount = () => {
   const searchParams = useSearchParams();
   const userId = searchParams.get("userId");
   const [showDialog, setShowDialog] = useState(false);
+  const [countdown, setCountdown] = useState<number | null>(null); // countdown in seconds
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchExpiredTime = async () => {
+      try {
+        const res = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`,{userid: userId}
+        );
+        const expiredAt = new Date(res.data.data.expiredAt).getTime();
+        const now = new Date().getTime();
+        const secondsLeft = Math.max(0, Math.floor((expiredAt - now) / 1000));
+        setCountdown(secondsLeft);
+      } catch (err) {
+        console.error("Failed to fetch expired time", err);
+      }
+    };
+
+    fetchExpiredTime();
+  }, [userId]);
+
+  // Countdown logic
+  useEffect(() => {
+    if (countdown === null) return;
+    if (countdown <= 0) return;
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => (prev !== null ? prev - 1 : null));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [countdown]);
+
 
   const handleLoginClick = async () => {
     router.push("/signin", {
@@ -55,6 +88,36 @@ const VerifyAccount = () => {
     }
   });
 
+  const formatTime = (seconds: number) => {
+    const min = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const sec = (seconds % 60).toString().padStart(2, "0");
+    return `${min}:${sec}`;
+  };
+
+  const handleResend = async () => {
+    if (!userId) return;
+  
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/resend-mail`, {
+        userid: userId,
+      });
+  
+      // After resending, re-fetch the expiration time
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/get-expired-time`, {
+        userid: userId,
+      });
+  
+      const expiredAt = new Date(res.data.data.expiredAt).getTime();
+      const now = new Date().getTime();
+      const secondsLeft = Math.max(0, Math.floor((expiredAt - now) / 1000));
+      setCountdown(secondsLeft);
+    } catch (error) {
+      console.error("Failed to resend email", error);
+    }
+  };
+  
   return (
     <>
       <section className="bg-gray-100">
@@ -64,6 +127,21 @@ const VerifyAccount = () => {
               <h1 className="text-xl font-bold text-gray-900 md:text-2xl text-center">
                 Active Account
               </h1>
+              {countdown !== null && (
+                <p className="text-sm text-center text-gray-600">
+                  Code expires in:{" "}
+                  <span className="font-medium text-blue-500">
+                    {formatTime(countdown)}
+                  </span>
+                </p>
+              )}
+              {countdown === 0 && (
+                <div className="text-center mt-4">
+                  <Button onClick={() => handleResend()} variant="outline">
+                    Resend Code
+                  </Button>
+                </div>
+              )}
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -134,9 +212,7 @@ const VerifyAccount = () => {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button onClick={() => handleLoginClick()}>
-              Go to sign in
-            </Button>
+            <Button onClick={() => handleLoginClick()}>Go to sign in</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
