@@ -27,7 +27,8 @@ export default function CoursesList() {
 
   return (
     <div className="grid sm:grid-cols-1 md:grid-cols-4 gap-6 p-4">
-      {data?.data.map((course: any, index: number) => (
+      {data?.data &&
+      data?.data.slice(0,4).map((course: any, index: number) => (
         <motion.div
           key={course.courseId}
           initial={{ y: 50, opacity: 0 }}
