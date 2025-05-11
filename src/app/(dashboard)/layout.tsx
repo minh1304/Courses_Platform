@@ -27,7 +27,8 @@ export default function DashboardLayout({
 
   // Always call hook, even if session not ready yet
   const { onlineUsers, sendMessage, onReceiveMessage } = useChatSocket(
-    session?.user?.id || "" 
+    session?.user?.id || "",
+     session?.user?.name || "",
   );
 
   if (status === "loading") return <Loading />;
@@ -39,10 +40,7 @@ export default function DashboardLayout({
       </div>
     );
   }
-
-  // You can now safely log online users
-  console.log("Online Users:", onlineUsers);
-
+  
   return (
     <div>
       <SidebarProvider className="dark">

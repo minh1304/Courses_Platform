@@ -15,10 +15,6 @@ interface Message {
 
 export default function ChatWindow() {
 
-  const userId = '74cdede8-6a5d-4f05-b29f-529457d4c370';
-  const userName = 'Minh Vo'
-  const chatSocket = useChatSocket(userId, userName);
-
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedUser, setSelectedUser] = useState<OnlineUser | null>(null);
   const [newMessage, setNewMessage] = useState("");
