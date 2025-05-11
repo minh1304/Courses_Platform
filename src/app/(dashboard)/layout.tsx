@@ -13,20 +13,36 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useSession } from "next-auth/react";
 import { DropdownAvatar } from "@/components/DropdownAvatar";
+import { useChatSocket } from "@/hooks/useChatSocket";
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const { data: session, status } = useSession();
+
+  // Always call hook, even if session not ready yet
+  const { onlineUsers, sendMessage, onReceiveMessage } = useChatSocket(
+    session?.user?.id || "" 
+  );
+
   if (status === "loading") return <Loading />;
-  if (status === "unauthenticated" || !session?.user)
-    return <div className="text-center mt-10">Please sign in to access this page.</div>;
+
+  if (status === "unauthenticated" || !session?.user) {
+    return (
+      <div className="text-center mt-10">
+        Please sign in to access this page.
+      </div>
+    );
+  }
+
+  // You can now safely log online users
+  console.log("Online Users:", onlineUsers);
+
   return (
     <div>
       <SidebarProvider className="dark">
@@ -40,14 +56,14 @@ export default function DashboardLayout({
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href={`/${session.user?.usertype}/courses`}>
+                  <BreadcrumbLink href={`/${session.user.usertype}/courses`}>
                     Dashboard
                   </BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
             <div className="ml-auto">
-              <DropdownAvatar {...session?.user} />
+              <DropdownAvatar {...session.user} />
             </div>
           </header>
 
