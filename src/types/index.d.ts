@@ -72,10 +72,15 @@ declare global {
     userName: string;
   }
   
+  // interface Message {
+  //   from: string;
+  //   to: string;
+  //   content: string;
+  // }
   interface Message {
-    from: string;
-    to: string;
-    content: string;
+      senderId: String,
+      receiverId: String,
+      content: String,
   }
 }
   

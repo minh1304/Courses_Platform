@@ -8,41 +8,45 @@ export default function ChatPage() {
   const userId = session?.user?.id ?? "";
   const userName = session?.user.name || "";
 
-
-  const {
-    onlineUsers,
-    sendMessage,
-    onReceiveMessage,
-  } = useChatSocket(userId, userName);
+  const { onlineUsers, sendMessage, onReceiveMessage, getMessageHistory } =
+    useChatSocket(userId, userName);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedUser, setSelectedUser] = useState<OnlineUser | null>(null);
   const [newMessage, setNewMessage] = useState("");
 
-  // Listen for incoming messages
-  useEffect(() => {
-    onReceiveMessage((msg: Message) => {
-      setMessages((prev) => [...prev, msg]);
-    });
-  }, [onReceiveMessage]);
-
   const handleSend = () => {
     if (!selectedUser || !newMessage.trim()) return;
     const message: Message = {
-      from: userId,
-      to: selectedUser.userId,
+      senderId: userId,
+      receiverId: selectedUser.userId,
       content: newMessage.trim(),
     };
+
     sendMessage(selectedUser.userId, newMessage.trim());
     setMessages((prev) => [...prev, message]);
     setNewMessage("");
   };
+  useEffect(() => {
+    if (selectedUser) {
+      getMessageHistory(userId, selectedUser.userId, (msgs) => {
+        console.log("Fetched message history:", msgs);
+        setMessages(msgs);
+      });
+    }
+  }, [selectedUser, userId]);
+
+  useEffect(() => {
+    onReceiveMessage((msg: any) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+  }, [onReceiveMessage]);
 
   return (
     <div className="flex h-[90vh]">
       {/* Left Sidebar: Online Users */}
       <div className=" text-white w-64 p-4">
-        <h2 className="text-lg font-semibold mb-4">Chats</h2> 
+        <h2 className="text-lg font-semibold mb-4">Chats</h2>
         <ul className="space-y-4">
           {onlineUsers
             .filter((user) => user.userId !== userId)
@@ -51,7 +55,9 @@ export default function ChatPage() {
                 key={user.userId}
                 onClick={() => setSelectedUser(user)}
                 className={`flex items-center gap-3 cursor-pointer ${
-                  selectedUser?.userId === user.userId ? "bg-indigo-500 p-2 rounded" : ""
+                  selectedUser?.userId === user.userId
+                    ? "bg-indigo-500 p-2 rounded"
+                    : ""
                 }`}
               >
                 <div className="relative">
@@ -75,18 +81,19 @@ export default function ChatPage() {
             <div className="p-4 border-b font-semibold text-white">
               Chat with {selectedUser.userName}
             </div>
+            
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {messages
                 .filter(
                   (msg) =>
-                    (msg.from === userId && msg.to === selectedUser.userId) ||
-                    (msg.from === selectedUser.userId && msg.to === userId)
+                    (msg.senderId === userId && msg.receiverId === selectedUser?.userId) ||
+                    (msg.senderId === selectedUser?.userId && msg.receiverId === userId)
                 )
                 .map((msg, idx) => (
                   <div
                     key={idx}
                     className={`p-2 rounded-md max-w-xs ${
-                      msg.from === userId
+                      msg.senderId === userId
                         ? "ml-auto bg-indigo-500 text-white"
                         : "mr-auto bg-gray-600 text-white"
                     }`}

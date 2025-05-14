@@ -30,9 +30,27 @@ export const useChatSocket = (userId: string, userName: string) => {
     socket.off("receiveMessage");
     socket.on("receiveMessage", callback);
   };
+
+  const getMessageHistory = (
+    user1: string,
+    user2: string,
+    callback: (msgs: Message[]) => void
+  ) => {
+    const socket = getSocket(userId, userName);
+    if (!socket) return;
+
+    socket.emit("getMessageHistory", { user1, user2 });
+
+    // Remove any previous listener to prevent stacking
+    socket.off("messageHistory", callback);
+    socket.once("messageHistory", callback);
+  };
+
+
   return {
     onlineUsers,
     sendMessage,
     onReceiveMessage,
+    getMessageHistory,
   };
 };
