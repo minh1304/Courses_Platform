@@ -67,6 +67,21 @@ declare global {
     email?: string | null
     image?: string | null
   }
+  interface OnlineUser {
+    userId: string;
+    userName: string;
+  }
+  
+  // interface Message {
+  //   from: string;
+  //   to: string;
+  //   content: string;
+  // }
+  interface Message {
+      senderId: String,
+      receiverId: String,
+      content: String,
+  }
 }
   
   export {};

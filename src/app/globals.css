@@ -126,7 +126,9 @@
 }
 
 html, 
-body,
+body {
+  background-color: black;
+}
 :root {
   height: 100%;
 }

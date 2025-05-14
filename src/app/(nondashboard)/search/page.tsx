@@ -18,7 +18,7 @@ const Search = () => {
   useEffect(() => {
     if(courses) {
         if(id) {
-            const course = courses.find((c: any) => c.courseId === id);
+            const course = courses.data.find((c: any) => c.courseId === id);
             setSelectedCourse(course || courses[0]);
         }
         else {
@@ -60,7 +60,7 @@ const Search = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="basis-3/5 grid grid-cols-1 xl:grid-cols-2 gap-6 auto-rows-fr"
           >
-            {courses.map((course: Course) => (
+            {courses.data.map((course: Course) => (
               <CourseCardSearch
                 key={course.courseId}
                 course={course}

@@ -42,6 +42,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user } : any) {
       // First time the user signs in
       if (user) {
+        token.id = user._id;
         token.email = user.email;
         token.name = user.name;
         token.usertype = user.usertype;
@@ -51,6 +52,7 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token, user } : any) {
       if (token) {  
+        session.user.id  = token.id;
         session.user.email = token.email;
         session.user.username = token.userName;
         session.user.usertype = token.usertype;
