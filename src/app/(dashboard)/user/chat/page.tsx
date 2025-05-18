@@ -1,5 +1,6 @@
 "use client";
 import { useChatSocket } from "@/hooks/useChatSocket";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 
@@ -8,12 +9,35 @@ export default function ChatPage() {
   const userId = session?.user?.id ?? "";
   const userName = session?.user.name || "";
 
+  const config = {
+    headers: { Authorization: `Bearer ${session?.user.accessToken}` }
+  };
   const { onlineUsers, sendMessage, onReceiveMessage, getMessageHistory } =
     useChatSocket(userId, userName);
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [selectedUser, setSelectedUser] = useState<OnlineUser | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [inboxUsers, setInboxUsers] = useState<OnlineUser[]>([]);
+  useEffect(() => {
+    const fetchInboxUsers = async () => {
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/message/get-inbox-users`,
+          {
+            userId: userId,
+          },
+          config
+        );
+        const users = res.data.data;
+
+        setInboxUsers(users);
+      } catch (error) {
+        console.error("Failed to fetch inbox users", error);
+      }
+    };
+
+    if (userId) fetchInboxUsers();
+  }, [userId]);
 
   const handleSend = () => {
     if (!selectedUser || !newMessage.trim()) return;
@@ -48,7 +72,11 @@ export default function ChatPage() {
       <div className=" text-white w-64 p-4">
         <h2 className="text-lg font-semibold mb-4">Chats</h2>
         <ul className="space-y-4">
-          {onlineUsers
+
+          {/* User Online */}
+
+          {/* User Ib */}
+          {inboxUsers
             .filter((user) => user.userId !== userId)
             .map((user) => (
               <li

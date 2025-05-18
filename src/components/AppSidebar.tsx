@@ -18,6 +18,7 @@ import {
     Settings,
     User,
     User2,
+    MessageSquareMore
   } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { DropdownAvatar } from "./DropdownAvatar";
@@ -25,12 +26,14 @@ import { DropdownAvatar } from "./DropdownAvatar";
     const navLinks = {
       user: [
         { icon: BookOpen, label: "Courses", href: "/user/courses" },
+        { icon: MessageSquareMore, label: "Chat", href: "/user/chat" },
         { icon: Briefcase, label: "Billing", href: "/user/billing" },
         { icon: User, label: "Profile", href: "/user/profile" },
         { icon: Settings, label: "Settings", href: "/user/settings" },
       ],
       teacher: [
         { icon: BookOpen, label: "Courses", href: "/teacher/courses" },
+        { icon: MessageSquareMore, label: "Chat", href: "/teacher/chat" },
         { icon: DollarSign, label: "Billing", href: "/teacher/billing" },
         { icon: User, label: "Profile", href: "/teacher/profile" },
         { icon: Settings, label: "Settings", href: "/teacher/settings" },
