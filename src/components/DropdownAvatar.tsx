@@ -5,8 +5,13 @@ import { DropdownMenu } from '@radix-ui/react-dropdown-menu';
 import { DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { SidebarMenuButton } from './ui/sidebar';
 import { signOut } from 'next-auth/react';
+import { disconnectSocket } from '@/lib/chatSocket';
 
 export const DropdownAvatar = ({ name, email, image } : DropdownAvatar ) => {
+  const handleSignOut = () => {
+    signOut({ callbackUrl: "http://localhost:3000/signin" }),
+    disconnectSocket();
+  }
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -38,9 +43,7 @@ export const DropdownAvatar = ({ name, email, image } : DropdownAvatar ) => {
         </DropdownMenuItem>
         <DropdownMenuItem>
           <button
-            onClick={() =>
-              signOut({ callbackUrl: "http://localhost:3000/signin" })
-            }
+            onClick={() => handleSignOut()}
           >
             Sign out
           </button>

@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect } from "react";
 import { getSession, signIn, useSession } from "next-auth/react";
+import Loading from "./Loading";
 
 const SignIn = () => {
   const mutationFn = async (userData: User) => {
@@ -58,6 +59,9 @@ const SignIn = () => {
       mutation.mutate(value);
     },
   });
+  if (mutation.isPending) {
+    return <Loading />;
+  }
   return (
     <section className="bg-gray-100">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
