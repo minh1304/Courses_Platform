@@ -15,6 +15,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import Loading from './Loading';
 
 const SignUp = () => {
     const router = useRouter();
@@ -67,6 +68,9 @@ const SignUp = () => {
         mutation.mutate(value);
       },
     });
+  if (mutation.isPending) {
+    return <Loading />;
+  }
   return (
     <>
       <section className="bg-gray-100">

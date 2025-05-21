@@ -72,15 +72,28 @@ declare global {
     userName: string;
   }
   
-  // interface Message {
-  //   from: string;
-  //   to: string;
-  //   content: string;
-  // }
   interface Message {
       senderId: String,
       receiverId: String,
       content: String,
+  }
+
+  interface ChatAreaProps {
+    userId: string;
+    userName: string;
+    token: string;
+    selectedUser: OnlineUser | null;
+  }
+  interface InboxUsersProp {
+    onSelectUser: (user: OnlineUser) => void;
+  }
+  interface OnlineUsersProp {
+    onSelectUser: (user: OnlineUser) => void;
+  }
+    interface HeaderProps {
+    title: string;
+    subtitle: string;
+    rightElement?: ReactNode;
   }
 }
   
